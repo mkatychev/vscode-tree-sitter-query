@@ -31,26 +31,20 @@
       ]
     },
     "comment-inherits": {
-      "match": "^\\s*(;+\\s*inherits\\s*:.*)$",
-      "captures": {
-        "1": { "name": "keyword.control.import.scm" }
-      }
+      "match": "^[ \\t]*;+[ \\t]*inherits[ \\t]*:[^\\n]*$",
+      "name": "keyword.control.import.scm"
     },
     "comment-extends": {
-      "match": "^\\s*(;+\\s*extends\\s*)$",
-      "captures": {
-        "1": { "name": "keyword.control.directive.scm" }
-      }
+      "match": "^[ \\t]*;+[ \\t]*extends[ \\t]*$",
+      "name": "keyword.control.directive.scm"
     },
     "comment-format-ignore": {
-      "match": "^\\s*(;+\\s*format-ignore\\s*)$",
-      "captures": {
-        "1": { "name": "keyword.control.directive.scm" }
-      }
+      "match": "^[ \\t]*;+[ \\t]*format-ignore[ \\t]*$",
+      "name": "keyword.control.directive.scm"
     },
     "comment": {
       "begin": ";",
-      "end": "$",
+      "end": "(?=\\n)",
       "name": "comment.line.semicolon.scm",
       "beginCaptures": {
         "0": { "name": "punctuation.definition.comment.scm" }
@@ -85,7 +79,7 @@
       ]
     },
     "escape-sequence": {
-      "match": "\\\\(.|$)",
+      "match": "\\\\.",
       "name": "constant.character.escape.scm"
     },
     "regex-predicate-call": {
