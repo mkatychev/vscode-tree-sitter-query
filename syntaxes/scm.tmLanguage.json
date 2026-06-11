@@ -9,26 +9,27 @@
   ],
   "repository": {
     "expression": {
+      "comment": "Ordered specific-before-general. Do not alphabetize: e.g. `#comment` matches `;` and would swallow the `;+ inherits:` directive comments",
       "patterns": [
-        { "include": "#anchor" },
-        { "include": "#capture" },
-        { "include": "#comment" },
+        { "include": "#comment-inherits" },
         { "include": "#comment-extends" },
         { "include": "#comment-format-ignore" },
-        { "include": "#comment-inherits" },
-        { "include": "#expression-bracket" },
-        { "include": "#expression-paren" },
-        { "include": "#field" },
-        { "include": "#field-negated" },
-        { "include": "#keyword-error" },
-        { "include": "#keyword-missing" },
-        { "include": "#node" },
-        { "include": "#predicate-call" },
+        { "include": "#comment" },
         { "include": "#predicate-regex" },
         { "include": "#predicate-set" },
-        { "include": "#quantifier" },
+        { "include": "#predicate-call" },
+        { "include": "#expression-paren" },
+        { "include": "#expression-bracket" },
         { "include": "#string" },
-        { "include": "#wildcard" }
+        { "include": "#capture" },
+        { "include": "#anchor" },
+        { "include": "#quantifier" },
+        { "include": "#field-negated" },
+        { "include": "#field" },
+        { "include": "#keyword-missing" },
+        { "include": "#keyword-error" },
+        { "include": "#wildcard" },
+        { "include": "#node" }
       ]
     },
     "comment-inherits": {
