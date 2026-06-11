@@ -1,226 +1,226 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Tree-sitter Query",
-	"scopeName": "source.scm",
-	"patterns": [
-		{
-			"include": "#expression"
-		}
-	],
-	"repository": {
-		"expression": {
-			"patterns": [
-				{ "include": "#comment-inherits" },
-				{ "include": "#comment-extends" },
-				{ "include": "#comment-format-ignore" },
-				{ "include": "#comment" },
-				{ "include": "#regex-predicate-call" },
-				{ "include": "#set-predicate-call" },
-				{ "include": "#predicate-call" },
-				{ "include": "#paren-expression" },
-				{ "include": "#bracket-expression" },
-				{ "include": "#string" },
-				{ "include": "#missing-keyword" },
-				{ "include": "#wildcard" },
-				{ "include": "#anchor" },
-				{ "include": "#capture" },
-				{ "include": "#quantifier" },
-				{ "include": "#negated-field" },
-				{ "include": "#field" },
-				{ "include": "#node" }
-			]
-		},
-		"comment-inherits": {
-			"match": "^\\s*(;+\\s*inherits\\s*:.*)$",
-			"captures": {
-				"1": { "name": "keyword.control.import.scm" }
-			}
-		},
-		"comment-extends": {
-			"match": "^\\s*(;+\\s*extends\\s*)$",
-			"captures": {
-				"1": { "name": "keyword.control.directive.scm" }
-			}
-		},
-		"comment-format-ignore": {
-			"match": "^\\s*(;+\\s*format-ignore\\s*)$",
-			"captures": {
-				"1": { "name": "keyword.control.directive.scm" }
-			}
-		},
-		"comment": {
-			"begin": ";",
-			"end": "$",
-			"name": "comment.line.semicolon.scm",
-			"beginCaptures": {
-				"0": { "name": "punctuation.definition.comment.scm" }
-			}
-		},
-		"string": {
-			"begin": "\"",
-			"end": "\"",
-			"name": "string.quoted.double.scm",
-			"beginCaptures": {
-				"0": { "name": "punctuation.definition.string.begin.scm" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.definition.string.end.scm" }
-			},
-			"patterns": [
-				{ "include": "#escape-sequence" }
-			]
-		},
-		"regex-string": {
-			"begin": "\"",
-			"end": "\"",
-			"name": "string.regexp.scm",
-			"beginCaptures": {
-				"0": { "name": "punctuation.definition.string.begin.scm" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.definition.string.end.scm" }
-			},
-			"patterns": [
-				{ "include": "#escape-sequence" }
-			]
-		},
-		"escape-sequence": {
-			"match": "\\\\(.|$)",
-			"name": "constant.character.escape.scm"
-		},
-		"regex-predicate-call": {
-			"begin": "(\\()\\s*(#)((?:not-)?(?:match|vim-match|lua-match|gsub)\\??)",
-			"beginCaptures": {
-				"1": { "name": "punctuation.section.parens.begin.scm" },
-				"2": { "name": "punctuation.definition.predicate.scm" },
-				"3": { "name": "entity.name.function.predicate.scm" }
-			},
-			"end": "\\)",
-			"endCaptures": {
-				"0": { "name": "punctuation.section.parens.end.scm" }
-			},
-			"patterns": [
-				{ "include": "#capture" },
-				{ "include": "#regex-string" }
-			]
-		},
-		"set-predicate-call": {
-			"begin": "(\\()\\s*(#)(set!)",
-			"beginCaptures": {
-				"1": { "name": "punctuation.section.parens.begin.scm" },
-				"2": { "name": "punctuation.definition.predicate.scm" },
-				"3": { "name": "entity.name.function.predicate.scm" }
-			},
-			"end": "\\)",
-			"endCaptures": {
-				"0": { "name": "punctuation.section.parens.end.scm" }
-			},
-			"patterns": [
-				{ "include": "#capture" },
-				{ "include": "#string" },
-				{ "include": "#predicate-number" },
-				{ "include": "#predicate-property" }
-			]
-		},
-		"predicate-call": {
-			"begin": "(\\()\\s*(#)([a-zA-Z_][a-zA-Z0-9_-]*)([?!]?)",
-			"beginCaptures": {
-				"1": { "name": "punctuation.section.parens.begin.scm" },
-				"2": { "name": "punctuation.definition.predicate.scm" },
-				"3": { "name": "entity.name.function.predicate.scm" },
-				"4": { "name": "punctuation.definition.predicate-type.scm" }
-			},
-			"end": "\\)",
-			"endCaptures": {
-				"0": { "name": "punctuation.section.parens.end.scm" }
-			},
-			"patterns": [
-				{ "include": "#capture" },
-				{ "include": "#string" },
-				{ "include": "#predicate-number" },
-				{ "include": "#predicate-identifier" }
-			]
-		},
-		"predicate-number": {
-			"match": "(?<!\\w)[-+]?[0-9]+(?:\\.[0-9]+)?(?!\\w)",
-			"name": "constant.numeric.scm"
-		},
-		"predicate-property": {
-			"match": "[a-zA-Z_][a-zA-Z0-9_-]*",
-			"name": "variable.other.property.scm"
-		},
-		"predicate-identifier": {
-			"match": "[a-zA-Z_][a-zA-Z0-9_-]*",
-			"name": "variable.parameter.scm"
-		},
-		"paren-expression": {
-			"begin": "\\(",
-			"end": "\\)",
-			"beginCaptures": {
-				"0": { "name": "punctuation.section.parens.begin.scm" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.section.parens.end.scm" }
-			},
-			"name": "meta.expression.group.scm",
-			"patterns": [
-				{ "include": "#expression" }
-			]
-		},
-		"bracket-expression": {
-			"begin": "\\[",
-			"end": "\\]",
-			"beginCaptures": {
-				"0": { "name": "punctuation.section.brackets.begin.scm" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.section.brackets.end.scm" }
-			},
-			"name": "meta.expression.alternative.scm",
-			"patterns": [
-				{ "include": "#expression" }
-			]
-		},
-		"missing-keyword": {
-			"match": "\\bMISSING\\b",
-			"name": "keyword.control.missing.scm"
-		},
-		"wildcard": {
-			"match": "\\b_\\b",
-			"name": "constant.language.wildcard.scm"
-		},
-		"anchor": {
-			"match": "(?<!\\w)\\.(?!\\w)",
-			"name": "keyword.operator.anchor.scm"
-		},
-		"capture": {
-			"match": "(@)([a-zA-Z_][a-zA-Z0-9_.]*)",
-			"captures": {
-				"1": { "name": "punctuation.definition.capture.scm" },
-				"2": { "name": "entity.name.type.capture.scm" }
-			}
-		},
-		"quantifier": {
-			"match": "[?*+]",
-			"name": "keyword.operator.quantifier.scm"
-		},
-		"negated-field": {
-			"match": "(!)([a-zA-Z_][a-zA-Z0-9_-]*)",
-			"captures": {
-				"1": { "name": "keyword.operator.negation.scm" },
-				"2": { "name": "variable.other.property.scm" }
-			}
-		},
-		"field": {
-			"match": "([a-zA-Z_][a-zA-Z0-9_-]*)(:)",
-			"captures": {
-				"1": { "name": "variable.other.member.scm" },
-				"2": { "name": "punctuation.separator.field.scm" }
-			}
-		},
-		"node": {
-			"match": "[a-zA-Z_][a-zA-Z0-9_-]*",
-			"name": "variable.other.node.scm"
-		}
-	}
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Tree-sitter Query",
+  "scopeName": "source.scm",
+  "patterns": [
+    {
+      "include": "#expression"
+    }
+  ],
+  "repository": {
+    "expression": {
+      "patterns": [
+        { "include": "#comment-inherits" },
+        { "include": "#comment-extends" },
+        { "include": "#comment-format-ignore" },
+        { "include": "#comment" },
+        { "include": "#regex-predicate-call" },
+        { "include": "#set-predicate-call" },
+        { "include": "#predicate-call" },
+        { "include": "#paren-expression" },
+        { "include": "#bracket-expression" },
+        { "include": "#string" },
+        { "include": "#missing-keyword" },
+        { "include": "#wildcard" },
+        { "include": "#anchor" },
+        { "include": "#capture" },
+        { "include": "#quantifier" },
+        { "include": "#negated-field" },
+        { "include": "#field" },
+        { "include": "#node" }
+      ]
+    },
+    "comment-inherits": {
+      "match": "^\\s*(;+\\s*inherits\\s*:.*)$",
+      "captures": {
+        "1": { "name": "keyword.control.import.scm" }
+      }
+    },
+    "comment-extends": {
+      "match": "^\\s*(;+\\s*extends\\s*)$",
+      "captures": {
+        "1": { "name": "keyword.control.directive.scm" }
+      }
+    },
+    "comment-format-ignore": {
+      "match": "^\\s*(;+\\s*format-ignore\\s*)$",
+      "captures": {
+        "1": { "name": "keyword.control.directive.scm" }
+      }
+    },
+    "comment": {
+      "begin": ";",
+      "end": "$",
+      "name": "comment.line.semicolon.scm",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.scm" }
+      }
+    },
+    "string": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.quoted.double.scm",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.scm" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.scm" }
+      },
+      "patterns": [
+        { "include": "#escape-sequence" }
+      ]
+    },
+    "regex-string": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.regexp.scm",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.scm" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.scm" }
+      },
+      "patterns": [
+        { "include": "#escape-sequence" }
+      ]
+    },
+    "escape-sequence": {
+      "match": "\\\\(.|$)",
+      "name": "constant.character.escape.scm"
+    },
+    "regex-predicate-call": {
+      "begin": "(\\()\\s*(#)((?:not-)?(?:match|vim-match|lua-match|gsub)\\??)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.section.parens.begin.scm" },
+        "2": { "name": "punctuation.definition.predicate.scm" },
+        "3": { "name": "entity.name.function.predicate.scm" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.section.parens.end.scm" }
+      },
+      "patterns": [
+        { "include": "#capture" },
+        { "include": "#regex-string" }
+      ]
+    },
+    "set-predicate-call": {
+      "begin": "(\\()\\s*(#)(set!)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.section.parens.begin.scm" },
+        "2": { "name": "punctuation.definition.predicate.scm" },
+        "3": { "name": "entity.name.function.predicate.scm" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.section.parens.end.scm" }
+      },
+      "patterns": [
+        { "include": "#capture" },
+        { "include": "#string" },
+        { "include": "#predicate-number" },
+        { "include": "#predicate-property" }
+      ]
+    },
+    "predicate-call": {
+      "begin": "(\\()\\s*(#)([a-zA-Z_][a-zA-Z0-9_-]*)([?!]?)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.section.parens.begin.scm" },
+        "2": { "name": "punctuation.definition.predicate.scm" },
+        "3": { "name": "entity.name.function.predicate.scm" },
+        "4": { "name": "punctuation.definition.predicate-type.scm" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.section.parens.end.scm" }
+      },
+      "patterns": [
+        { "include": "#capture" },
+        { "include": "#string" },
+        { "include": "#predicate-number" },
+        { "include": "#predicate-identifier" }
+      ]
+    },
+    "predicate-number": {
+      "match": "(?<!\\w)[-+]?[0-9]+(?:\\.[0-9]+)?(?!\\w)",
+      "name": "constant.numeric.scm"
+    },
+    "predicate-property": {
+      "match": "[a-zA-Z_][a-zA-Z0-9_-]*",
+      "name": "variable.other.property.scm"
+    },
+    "predicate-identifier": {
+      "match": "[a-zA-Z_][a-zA-Z0-9_-]*",
+      "name": "variable.parameter.scm"
+    },
+    "paren-expression": {
+      "begin": "\\(",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": { "name": "punctuation.section.parens.begin.scm" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.section.parens.end.scm" }
+      },
+      "name": "meta.expression.group.scm",
+      "patterns": [
+        { "include": "#expression" }
+      ]
+    },
+    "bracket-expression": {
+      "begin": "\\[",
+      "end": "\\]",
+      "beginCaptures": {
+        "0": { "name": "punctuation.section.brackets.begin.scm" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.section.brackets.end.scm" }
+      },
+      "name": "meta.expression.alternative.scm",
+      "patterns": [
+        { "include": "#expression" }
+      ]
+    },
+    "missing-keyword": {
+      "match": "\\bMISSING\\b",
+      "name": "keyword.control.missing.scm"
+    },
+    "wildcard": {
+      "match": "\\b_\\b",
+      "name": "constant.language.wildcard.scm"
+    },
+    "anchor": {
+      "match": "(?<!\\w)\\.(?!\\w)",
+      "name": "keyword.operator.anchor.scm"
+    },
+    "capture": {
+      "match": "(@)([a-zA-Z_][a-zA-Z0-9_.]*)",
+      "captures": {
+        "1": { "name": "punctuation.definition.capture.scm" },
+        "2": { "name": "entity.name.type.capture.scm" }
+      }
+    },
+    "quantifier": {
+      "match": "[?*+]",
+      "name": "keyword.operator.quantifier.scm"
+    },
+    "negated-field": {
+      "match": "(!)([a-zA-Z_][a-zA-Z0-9_-]*)",
+      "captures": {
+        "1": { "name": "keyword.operator.negation.scm" },
+        "2": { "name": "variable.other.property.scm" }
+      }
+    },
+    "field": {
+      "match": "([a-zA-Z_][a-zA-Z0-9_-]*)(:)",
+      "captures": {
+        "1": { "name": "variable.other.member.scm" },
+        "2": { "name": "punctuation.separator.field.scm" }
+      }
+    },
+    "node": {
+      "match": "[a-zA-Z_][a-zA-Z0-9_-]*",
+      "name": "variable.other.node.scm"
+    }
+  }
 }
