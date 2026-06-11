@@ -10,24 +10,25 @@
   "repository": {
     "expression": {
       "patterns": [
-        { "include": "#comment-inherits" },
-        { "include": "#comment-extends" },
-        { "include": "#comment-format-ignore" },
-        { "include": "#comment" },
-        { "include": "#regex-predicate-call" },
-        { "include": "#set-predicate-call" },
-        { "include": "#predicate-call" },
-        { "include": "#paren-expression" },
-        { "include": "#bracket-expression" },
-        { "include": "#string" },
-        { "include": "#missing-keyword" },
-        { "include": "#wildcard" },
         { "include": "#anchor" },
         { "include": "#capture" },
-        { "include": "#quantifier" },
-        { "include": "#negated-field" },
+        { "include": "#comment" },
+        { "include": "#comment-extends" },
+        { "include": "#comment-format-ignore" },
+        { "include": "#comment-inherits" },
+        { "include": "#expression-bracket" },
+        { "include": "#expression-paren" },
         { "include": "#field" },
-        { "include": "#node" }
+        { "include": "#field-negated" },
+        { "include": "#keyword-error" },
+        { "include": "#keyword-missing" },
+        { "include": "#node" },
+        { "include": "#predicate-call" },
+        { "include": "#predicate-regex" },
+        { "include": "#predicate-set" },
+        { "include": "#quantifier" },
+        { "include": "#string" },
+        { "include": "#wildcard" }
       ]
     },
     "comment-inherits": {
@@ -82,7 +83,7 @@
       "match": "\\\\.",
       "name": "constant.character.escape.scm"
     },
-    "regex-predicate-call": {
+    "predicate-regex": {
       "begin": "(\\()\\s*(#)((?:not-)?(?:match|vim-match|lua-match|gsub)\\??)",
       "beginCaptures": {
         "1": { "name": "punctuation.section.parens.begin.scm" },
@@ -98,7 +99,7 @@
         { "include": "#regex-string" }
       ]
     },
-    "set-predicate-call": {
+    "predicate-set": {
       "begin": "(\\()\\s*(#)(set!)",
       "beginCaptures": {
         "1": { "name": "punctuation.section.parens.begin.scm" },
@@ -147,7 +148,7 @@
       "match": "[a-zA-Z_][a-zA-Z0-9_-]*",
       "name": "variable.parameter.scm"
     },
-    "paren-expression": {
+    "expression-paren": {
       "begin": "\\(",
       "end": "\\)",
       "beginCaptures": {
@@ -161,7 +162,7 @@
         { "include": "#expression" }
       ]
     },
-    "bracket-expression": {
+    "expression-bracket": {
       "begin": "\\[",
       "end": "\\]",
       "beginCaptures": {
@@ -175,9 +176,13 @@
         { "include": "#expression" }
       ]
     },
-    "missing-keyword": {
+    "keyword-missing": {
       "match": "\\bMISSING\\b",
       "name": "keyword.control.missing.scm"
+    },
+    "keyword-error": {
+      "match": "\\bERROR\\b",
+      "name": "keyword.control.error.scm"
     },
     "wildcard": {
       "match": "\\b_\\b",
@@ -198,7 +203,7 @@
       "match": "[?*+]",
       "name": "keyword.operator.quantifier.scm"
     },
-    "negated-field": {
+    "field-negated": {
       "match": "(!)([a-zA-Z_][a-zA-Z0-9_-]*)",
       "captures": {
         "1": { "name": "keyword.operator.negation.scm" },
